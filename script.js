@@ -6,7 +6,7 @@ let answered = [false, false, false, false, false];
 // =======================
 
 const answers = [
-  true,  // 1
+  true,  // 1 
   true,  // 2
   true,  // 3
   false, // 4
