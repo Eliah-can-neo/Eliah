@@ -1,64 +1,83 @@
 let score = 0;
+let answered = [false, false, false, false, false];
 
-// Quiz Fragen
-function q1(correct){
+// =======================
+// QUIZ (10 FRAGEN SYSTEM)
+// =======================
+
+const answers = [
+  true,  // 1
+  true,  // 2
+  true,  // 3
+  false, // 4
+  true,  // 5
+  false, // 6
+  true,  // 7
+  true,  // 8
+  false, // 9
+  true   // 10
+];
+
+function answer(q, correct){
+  if(answered[q]) return; // verhindert mehrfach Punkte
+
+  answered[q] = true;
+
   if(correct){
-    document.getElementById("r1").innerText = "✔ Richtig!";
     score++;
+    document.getElementById("r"+q).innerText = "✔ Richtig";
   } else {
-    document.getElementById("r1").innerText = "✖ Falsch";
+    document.getElementById("r"+q).innerText = "✖ Falsch";
   }
-  check();
+
+  updateResult();
 }
 
-function q2(correct){
-  if(correct){
-    document.getElementById("r2").innerText = "✔ Richtig!";
-    score++;
+function updateResult(){
+  const res = document.getElementById("result");
+  if(!res) return;
+
+  let text = "Dein Ergebnis: " + score + " / 10 - ";
+
+  if(score >= 8){
+    text += "🏆 Sehr gut!";
+  } else if(score >= 5){
+    text += "👍 Gut!";
   } else {
-    document.getElementById("r2").innerText = "✖ Falsch";
+    text += "📚 Du kannst es noch üben.";
   }
-  check();
+
+  res.innerText = text;
 }
 
-function q3(correct){
-  if(correct){
-    document.getElementById("r3").innerText = "✔ Richtig!";
-    score++;
-  } else {
-    document.getElementById("r3").innerText = "✖ Falsch";
-  }
-  check();
-}
+// =======================
+// SCROLL ANIMATION
+// =======================
 
-// Ergebnis anzeigen
-function check(){
-  document.getElementById("result").innerText =
-    "Dein Punktestand: " + score + " / 3";
-}
-
-
-// 🌟 Scroll Animation (Sections erscheinen)
 const sections = document.querySelectorAll("section");
 
-function showSections(){
+function reveal(){
   sections.forEach(sec => {
     const top = sec.getBoundingClientRect().top;
-    if(top < window.innerHeight - 100){
+    if(top < window.innerHeight - 80){
       sec.classList.add("show");
     }
   });
 }
 
-window.addEventListener("scroll", showSections);
-window.addEventListener("load", showSections);
+window.addEventListener("scroll", reveal);
+window.addEventListener("load", reveal);
 
+// =======================
+// SMOOTH NAVIGATION
+// =======================
 
-// 🔝 Smooth Scroll für Navigation
-document.querySelectorAll("nav a").forEach(link => {
-  link.addEventListener("click", function(e){
+document.querySelectorAll("nav a").forEach(a => {
+  a.addEventListener("click", e => {
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    target.scrollIntoView({ behavior: "smooth" });
+    const target = document.querySelector(a.getAttribute("href"));
+    if(target){
+      target.scrollIntoView({behavior:"smooth"});
+    }
   });
 });
